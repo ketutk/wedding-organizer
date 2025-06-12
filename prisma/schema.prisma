@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  Requested
+  Approved
+  Rejected
+}
+
+model Admin {
+  id        String   @id @default(uuid()) @map("admin_id")
+  name      String   @db.VarChar(30)
+  email     String   @unique @db.VarChar(30)
+  password  String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Package {
+  id          String    @id @default(uuid()) @map("package_id")
+  name        String    @db.VarChar(30)
+  description String
+  image       String    @db.VarChar(255)
+  price       BigInt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+
+  @@map("packages")
+}
+
+model Booking {
+  id            String   @id @default(uuid()) @map("booking_id")
+  packageId     String?  @map("package_id")
+  customerName  String   @map("customer_name") @db.VarChar(30)
+  customerEmail String   @map("customer_email") @db.VarChar(30)
+  customerPhone String   @map("customer_phone") @db.VarChar(15)
+  date          DateTime
+  totalPayment  BigInt   @map("total_payment")
+  paymentImage  String   @map("payment_image") @db.VarChar(255)
+  status        Status   @default(Requested)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  package Package? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+
+  @@map("bookings")
+}
