@@ -6,6 +6,7 @@ import { useState } from "react";
 import { set } from "zod";
 import { usePackageContext } from "../packageContext";
 import { useMessage } from "@/app/messageContext";
+import { useLoading } from "@/app/loaderContext";
 
 interface ViewModalProps {
   data: Package;
@@ -15,26 +16,29 @@ export default function ViewModal({ data }: ViewModalProps) {
   const [show, setShow] = useState(false);
   const context = usePackageContext();
   const { showMessage } = useMessage();
+  const { showLoading } = useLoading();
 
   async function handleDelete() {
-    try {
-      await FetchData(`/api/admin/package/${data.id}`, "DELETE", null);
-      setShow(false);
-      if (context) {
-        context.setShouldRefresh(true);
+    await showLoading(async () => {
+      try {
+        await FetchData(`/api/admin/package/${data.id}`, "DELETE", null);
+        setShow(false);
+        if (context) {
+          context.setShouldRefresh(true);
+        }
+        showMessage("Package deleted successfully", "success");
+      } catch (error) {
+        if (typeof error === "string") {
+          console.error(error);
+        } else if (error instanceof Error) {
+          console.error(error.message);
+        }
       }
-      showMessage("Package deleted successfully", "success");
-    } catch (error) {
-      if (typeof error === "string") {
-        console.error(error);
-      } else if (error instanceof Error) {
-        console.error(error.message);
-      }
-    }
+    });
   }
   return (
     <Dialog open={show} onOpenChange={setShow}>
-      <DialogTrigger className="px-4 py-2 border border-black text-black rounded hover:bg-black hover:text-white transition cursor-pointer">View Package</DialogTrigger>
+      <DialogTrigger className="px-4 py-2 outline outline-blue-400 text-blue-400 rounded hover:bg-blue-400 hover:text-white transition cursor-pointer">View Package</DialogTrigger>
       <DialogContent className="bg-white text-black max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Package Details</DialogTitle>

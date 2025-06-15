@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BookingSchema } from "../schema"; // adjust this path if needed
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -15,6 +15,7 @@ import Link from "next/link";
 import { FetchData } from "@/lib/fetch";
 import { useLoading } from "@/app/loaderContext";
 import { useMessage } from "@/app/messageContext";
+import PaymentInstructionModal from "./PaymentInstructionModal";
 
 type BookingFormData = z.infer<typeof BookingSchema>;
 interface BookingFormProps {
@@ -22,6 +23,7 @@ interface BookingFormProps {
 }
 export default function BookingForm({ data }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
   const { showLoading } = useLoading();
   const { showMessage } = useMessage();
   const [image, setImage] = useState<File | null>(null);
@@ -68,6 +70,30 @@ export default function BookingForm({ data }: BookingFormProps) {
       }
     });
   };
+
+  useEffect(() => {
+    const checkAvailability = async () => {
+      await showLoading(async () => {
+        try {
+          const response = (await FetchData(`/api/booking/${data.id}/check`, "POST", { date: form.watch("date")?.toLocaleDateString() })) as { data: { isAvailable: boolean } };
+          setIsAvailable(response.data.isAvailable);
+          if (!response.data.isAvailable) {
+            showMessage("This package is not available for booking on the selected date", "error");
+          }
+        } catch (error) {
+          if (typeof error === "string") {
+            showMessage(error, "error");
+          } else if (error instanceof Error) {
+            showMessage(error.message, "error");
+          }
+        }
+      });
+    };
+
+    if (form.watch("date")) {
+      checkAvailability();
+    }
+  }, [form.watch("date")]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -135,7 +161,7 @@ export default function BookingForm({ data }: BookingFormProps) {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-2">
+          <div className={`flex flex-col gap-2 ${!isAvailable && "hidden"}`}>
             <FormLabel>Proof of Payment / Image Upload</FormLabel>
             <Input
               type="file"
@@ -146,9 +172,6 @@ export default function BookingForm({ data }: BookingFormProps) {
                 if (file) setImage(file);
               }}
             />
-            <Link href={"/images/qris.png"} target="_blank" className="text-sm hover:underline hover:text-pink-500">
-              Klik disini untuk lihat QRIS Pembayaran
-            </Link>
 
             {image && (
               <div className="mt-2">
@@ -157,7 +180,7 @@ export default function BookingForm({ data }: BookingFormProps) {
               </div>
             )}
           </div>
-
+          <PaymentInstructionModal />
           <div>
             <FormLabel>Total Payment</FormLabel>
             <p className="font-bold text-2xl">{formatNumber(data.price)}</p>

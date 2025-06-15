@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Booking } from "@/generated/prisma";
 import { formatNumber } from "@/utility/number";
+import Link from "next/link";
 
 type BookingWithPackage = Booking & {
   package: {
@@ -134,8 +135,9 @@ export default function CheckBookingPage() {
 
               {/* Footer Actions */}
               <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-4">
-                <button className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">Print Details</button>
-                <button className="px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors">Contact Support</button>
+                <Link href={`${process.env.NEXT_PUBLIC_WA_URL}`} target="_blank" className="px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors">
+                  Contact Support
+                </Link>
               </div>
             </div>
           ) : (

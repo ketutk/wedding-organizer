@@ -10,14 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { PackageSchema } from "../schema";
 import { useContext, useState } from "react";
 import { usePackageContext } from "../packageContext";
+import { useLoading } from "@/app/loaderContext";
 
-interface AddFormProps {
-  isLoading?: boolean;
-  setIsLoading?: (isLoading: boolean) => void;
-}
+interface AddFormProps {}
 
 export default function AddPackageForm({}: AddFormProps) {
   const { showMessage } = useMessage();
+  const { showLoading } = useLoading();
   const context = usePackageContext();
   const [image, setImage] = useState<File | null>(null);
 
@@ -31,39 +30,36 @@ export default function AddPackageForm({}: AddFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof PackageSchema>) {
-    try {
-      // Example: sending as FormData if image needs to be uploaded
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      if (image) {
-        formData.append("image", image);
-      }
+    await showLoading(async () => {
+      try {
+        // Example: sending as FormData if image needs to be uploaded
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("price", values.price);
+        if (image) {
+          formData.append("image", image);
+        }
 
-      await FetchData("/api/admin/package", "POST", formData);
-      if (context) {
-        console.log("PackageContext is available, setting shouldRefresh to true");
-        context.setShouldRefresh(true);
+        await FetchData("/api/admin/package", "POST", formData);
+        if (context) {
+          console.log("PackageContext is available, setting shouldRefresh to true");
+          context.setShouldRefresh(true);
+        }
+        showMessage("Package submitted successfully", "success");
+      } catch (error) {
+        if (typeof error == "string") {
+          showMessage(error, "error");
+        } else if (error instanceof Error) {
+          showMessage(error.message, "error");
+        }
       }
-      showMessage("Package submitted successfully", "success");
-    } catch (error) {
-      if (typeof error == "string") {
-        showMessage(error, "error");
-      } else if (error instanceof Error) {
-        showMessage(error.message, "error");
-      }
-    }
+    });
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit, (errors) => {
-          console.error("Form submission errors:", errors);
-        })}
-        className="space-y-4"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"

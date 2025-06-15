@@ -2,6 +2,8 @@ import Link from "next/link";
 import Head from "next/head";
 import UserLayout from "./_components/userLayout";
 import PackageSection from "./_components/PackageSection";
+import { Contact } from "lucide-react";
+import ContactSection from "./_components/ContactSection";
 
 export default function Home() {
   return (
@@ -93,37 +95,7 @@ export default function Home() {
             <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">Ready to start planning your dream wedding? Get in touch with us today!</p>
 
             <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Your Name
-                    </label>
-                    <input type="text" id="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
-                    <input type="email" id="email" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="wedding-date" className="block text-sm font-medium text-gray-700 mb-1">
-                    Preferred Wedding Date
-                  </label>
-                  <input type="date" id="wedding-date" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Message
-                  </label>
-                  <textarea id="message" rows={4} className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"></textarea>
-                </div>
-                <button type="submit" className="w-full px-6 py-3 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors font-medium">
-                  Send Inquiry
-                </button>
-              </form>
+              <ContactSection />
             </div>
           </div>
         </section>

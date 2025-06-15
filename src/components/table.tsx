@@ -8,6 +8,7 @@ import { useEffect, useState, ReactNode } from "react";
 type TableHeader = {
   key: string;
   label: string;
+  isNotCurrency?: boolean;
   className?: string;
 };
 
@@ -89,10 +90,7 @@ export function CustomTable<T extends Record<string, any>>({ headers, data, isLo
                   } else if (typeof value === "string" && isValidDateString(value)) {
                     displayValue = new Date(value).toLocaleString("ID");
                   } else if (typeof value === "number" || !isNaN(parseInt(value))) {
-                    displayValue = new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(Number(value));
+                    displayValue = header.isNotCurrency ? value : new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(value);
                   }
 
                   return (

@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 export const sendBookingsStatusEmail = async (to: string, subject: string, customerName: string, bookingId: string, status: Booking["status"]) => {
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"; // customize this
-    const bookingUrl = `${siteUrl}/bookings/check/${bookingId}`;
+    const bookingUrl = `${siteUrl}/booking/check/${bookingId}`;
 
     const statusText =
       status === "Approved" ? "has been <strong style='color:green;'>ACCEPTED</strong> 🎉" : status === "Requested" ? "is currently <strong style='color:orange;'>PENDING</strong>" : "has been <strong style='color:red;'>REJECTED</strong>";

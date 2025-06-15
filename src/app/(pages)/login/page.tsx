@@ -68,20 +68,6 @@ export default function LoginPage() {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        <p className="mt-4 text-center text-sm text-gray-500">
-          Don't have an account?{" "}
-          <a href="/register" className="text-black hover:underline">
-            Register here
-          </a>
-        </p>
-
-        <p className="mt-4 text-center text-sm text-gray-500">
-          Forgot your password?{" "}
-          <a href="#" className="text-black hover:underline">
-            Reset here
-          </a>
-        </p>
       </div>
     </div>
   );

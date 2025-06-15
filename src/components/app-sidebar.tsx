@@ -3,7 +3,7 @@
 import { useAuth } from "@/app/authContext";
 import { useLoading } from "@/app/loaderContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { Home, Inbox, Calendar, Search, Settings, ArrowRightFromLine, LucideProps, Building2 } from "lucide-react";
+import { Home, Inbox, Calendar, Search, Settings, ArrowRightFromLine, TextSelect } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -29,6 +29,11 @@ export function AppSidebar() {
       icon: Calendar,
     },
     {
+      title: "Reports",
+      url: "/admin/report",
+      icon: TextSelect,
+    },
+    {
       title: "Logout",
       url: "/api/logout",
       icon: ArrowRightFromLine,
@@ -44,12 +49,13 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="sidebar" className="bg-white shadow-lg">
-      <SidebarContent className="bg-gradient-to-b from-green-50 via-yellow-50 to-white">
+      <SidebarContent className="bg-gradient-to-b from-white via-purple-50 to-pink-300">
         <SidebarGroup>
           <SidebarGroupLabel className="flex justify-center py-6 mt-4">
-            <div className="w-40 h-24 relative">
-              <Image src="/logo.png" fill alt="logo saranin" className="object-contain opacity-80 hover:opacity-100 transition-opacity" />
-            </div>
+            <h1 className="text-2xl font-bold text-gray-800">
+              <span className="text-pink-500">Ever</span>
+              <span className="text-gray-600">After</span>
+            </h1>
           </SidebarGroupLabel>
         </SidebarGroup>
 

@@ -11,9 +11,11 @@ import { useLoading } from "@/app/loaderContext";
 import { SearchInput } from "@/components/search";
 import Link from "next/link";
 import { Package } from "@/generated/prisma";
-import AddModal from "./AddModal";
 import { PackageProvider, usePackageContext } from "../packageContext";
 import ViewModal from "./ViewModal";
+import ReusableModal from "./ReusableModal";
+import AddPackageForm from "./AddPackageForm";
+import UpdatePackageForm from "./UpdatePackageForm";
 
 export default function PackageTable() {
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +66,22 @@ export default function PackageTable() {
     return (
       <div className="flex gap-2">
         <ViewModal data={row} />
+        <ReusableModal
+          title="Update Package"
+          triggerLabel="Update Package"
+          triggerLabelClassname="outline outline-pink-400 text-pink-400 hover:bg-pink-400 hover:text-white"
+          form={<UpdatePackageForm data={row} />}
+          button={
+            <button
+              className="px-4 py-2 outline outline-pink-400 text-pink-400 font-bold rounded hover:bg-pink-400 hover:text-white cursor-pointer"
+              onClick={() => {
+                document.getElementById("update_package_button")?.click();
+              }}
+            >
+              Update Package
+            </button>
+          }
+        />
       </div>
     );
   };
@@ -100,7 +118,21 @@ export default function PackageTable() {
           delay={1000} // Custom debounce delay
           className="mb-4 max-w-md"
         />
-        <AddModal />
+        <ReusableModal
+          title="Add Package"
+          triggerLabel="Add Package"
+          form={<AddPackageForm />}
+          button={
+            <button
+              className="px-4 py-2 outline outline-black rounded hover:bg-black hover:text-white cursor-pointer"
+              onClick={() => {
+                document.getElementById("submit_button")?.click();
+              }}
+            >
+              Submit
+            </button>
+          }
+        />
       </div>
       <CustomTable data={packages} headers={headers} isLoading={isLoading} actions={renderActions} />
       <CustomPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />

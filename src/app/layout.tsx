@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wedding Organizer JeWePe",
-  description: "Wedding Organizer JeWePe",
+  title: "EverAfter Wedding Organizer",
+  description: "EverAfter Wedding Organizer",
 };
 
 export default function RootLayout({

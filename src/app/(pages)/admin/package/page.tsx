@@ -3,7 +3,7 @@ import { PackageProvider } from "./packageContext";
 
 export default function PackagePage() {
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className=" bg-white p-6">
       <PackageProvider>
         <PackageTable />
       </PackageProvider>

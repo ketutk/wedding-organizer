@@ -21,32 +21,31 @@ enum Status {
 }
 
 model Admin {
-  id        String   @id @default(uuid()) @map("admin_id")
-  name      String   @db.VarChar(30)
-  email     String   @unique @db.VarChar(30)
-  password  String   @db.VarChar(100)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       String @id @default(uuid()) @map("admin_id") @db.VarChar(50)
+  name     String @db.VarChar(30)
+  email    String @unique @db.VarChar(30)
+  password String @db.VarChar(100)
 
   @@map("admins")
 }
 
 model Package {
-  id          String    @id @default(uuid()) @map("package_id")
+  id          String    @id @default(uuid()) @map("package_id") @db.VarChar(50)
   name        String    @db.VarChar(30)
   description String
   image       String    @db.VarChar(255)
   price       BigInt
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? @map("deleted_at")
   bookings    Booking[]
 
   @@map("packages")
 }
 
 model Booking {
-  id            String   @id @default(uuid()) @map("booking_id")
-  packageId     String?  @map("package_id")
+  id            String   @id @default(uuid()) @map("booking_id") @db.VarChar(50)
+  packageId     String?  @map("package_id") @db.VarChar(50)
   customerName  String   @map("customer_name") @db.VarChar(30)
   customerEmail String   @map("customer_email") @db.VarChar(30)
   customerPhone String   @map("customer_phone") @db.VarChar(15)
